@@ -1323,7 +1323,7 @@ got_file_info_for_view_selection_callback (CajaFile *file,
 		uri = caja_file_get_uri (file);
 		if (eel_uri_is_search (uri))
         {
-			caja_navigation_window_show_search (CAJA_NAVIGATION_WINDOW(window));
+			caja_navigation_window_show_search (CAJA_NAVIGATION_WINDOW (window));
         }
 		g_free (uri);
 
