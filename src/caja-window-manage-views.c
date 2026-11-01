@@ -1204,6 +1204,7 @@ got_file_info_for_view_selection_callback (CajaFile *file,
     CajaWindowSlot *slot;
     GFile *location;
     MountNotMountedData *data;
+    gBoolean is_search_window = FALSE;
     slot = callback_data;
     g_assert (CAJA_IS_WINDOW_SLOT (slot));
     g_assert (slot->determine_view_file == file);
@@ -1253,6 +1254,16 @@ got_file_info_for_view_selection_callback (CajaFile *file,
     if (error == NULL ||
             (error->domain == G_IO_ERROR && error->code == G_IO_ERROR_NOT_SUPPORTED))
     {
+
+        /* Detect x-caja-search: */
+        char *uri;
+        uri = caja_file_get_uri (file);
+        if (eel_uri_is_search (uri))
+        {
+            is_search_window = TRUE;
+        }
+        g_free (uri);
+
         char *mimetype;
 
         /* We got the information we need, now pick what view to use: */
@@ -1279,16 +1290,12 @@ got_file_info_for_view_selection_callback (CajaFile *file,
         /* Otherwise, use default */
         if (view_id == NULL)
         {
-            char *uri;
-            uri = caja_file_get_uri (file);
 
             /* Use same view settings for search results as the current folder */
-            if (eel_uri_is_search (uri) && slot->content_view != NULL)
-			{
-				view_id = g_strdup (caja_view_get_view_id (slot->content_view));
-			}
-
-			g_free (uri);
+            if (is_search_window && slot->content_view != NULL)
+            {
+                view_id = g_strdup (caja_view_get_view_id (slot->content_view));
+            }
 
             if (view_id == NULL)
             {
@@ -1319,13 +1326,10 @@ got_file_info_for_view_selection_callback (CajaFile *file,
         create_content_view (slot, view_id);
         g_free (view_id);
 
-		char *uri;
-		uri = caja_file_get_uri (file);
-		if (eel_uri_is_search (uri))
+        if (is_search_window)
         {
-			caja_navigation_window_show_search (CAJA_NAVIGATION_WINDOW (window));
+            caja_navigation_window_show_search ( CAJA_NAVIGATION_WINDOW (window) );
         }
-		g_free (uri);
 
         report_callback (slot, NULL);
     }
