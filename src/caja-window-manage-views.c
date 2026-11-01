@@ -1283,16 +1283,17 @@ got_file_info_for_view_selection_callback (CajaFile *file,
             uri = caja_file_get_uri (file);
 
             /* Use same view settings for search results as the current folder */
-            if (eel_uri_is_search (uri))
-            {
-                view_id = g_strdup (caja_view_get_view_id (slot->content_view));
-            }
-            else
+            if (eel_uri_is_search (uri) && slot->content_view != NULL)
+			{
+				view_id = g_strdup (caja_view_get_view_id (slot->content_view));
+			}
+
+			g_free (uri);
+
+            if (view_id == NULL)
             {
                 view_id = caja_global_preferences_get_default_folder_viewer_preference_as_iid ();
             }
-
-            g_free (uri);
 
             if (view_id != NULL &&
                     !caja_view_factory_view_supports_uri (view_id,
@@ -1317,6 +1318,14 @@ got_file_info_for_view_selection_callback (CajaFile *file,
         }
         create_content_view (slot, view_id);
         g_free (view_id);
+
+		char *uri;
+		uri = caja_file_get_uri (file);
+		if (eel_uri_is_search (uri))
+        {
+			caja_navigation_window_show_search (CAJA_NAVIGATION_WINDOW(window));
+        }
+		g_free (uri);
 
         report_callback (slot, NULL);
     }
