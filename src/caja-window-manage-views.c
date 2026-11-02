@@ -1288,8 +1288,7 @@ got_file_info_for_view_selection_callback (CajaFile *file,
             {
                 view_id = g_strdup (caja_view_get_view_id (slot->content_view));
             }
-
-            if (view_id == NULL)
+            else
             {
                 view_id = caja_global_preferences_get_default_folder_viewer_preference_as_iid ();
             }
