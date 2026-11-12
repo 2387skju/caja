@@ -5536,6 +5536,13 @@ msgstr ""
 msgid "Search:"
 msgstr ""
 
+#: src/caja-search-bar.c:183
+msgid ""
+"Enter the name of the file or folder you are looking for.\n"
+"This can also be a partial name or file extension.\n"
+"You can then set additional search filters, such as text content or a date."
+msgstr ""
+
 #: src/caja-side-pane.c:381
 msgid "Close the side pane"
 msgstr ""
