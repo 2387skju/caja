@@ -179,6 +179,10 @@ caja_search_bar_init (CajaSearchBar *bar)
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY (bar->details->entry),
                                    GTK_ENTRY_ICON_SECONDARY,
                                    "edit-find");
+    gtk_widget_set_tooltip_text (GTK_WIDGET (bar->details->entry),
+                                  _("Enter the name of the file or folder you are looking for.\n"
+                                    "This can also be a partial name or file extension.\n"
+                                    "You can then set additional search filters, such as text content or a date."));
     gtk_box_pack_start (GTK_BOX (hbox), bar->details->entry, TRUE, TRUE, 0);
 
     g_signal_connect (bar->details->entry, "activate",
